@@ -1,0 +1,8 @@
+pair,n,pearson_r,p_value
+GDP per capita (PPP) vs Consumption per capita,166,0.877,0.0
+Internet penetration vs Consumption per capita,154,0.607,0.0
+Internet penetration vs Consumption CAGR,154,-0.219,0.00628
+Inflation vs YoY real consumption growth,153,-0.083,0.30833
+Urbanisation vs Consumption per capita,171,0.625,0.0
+Aging population (65+) vs Consumption share of GDP,182,-0.325,1e-05
+GDP per capita (PPP) vs Consumption CAGR (convergence check),166,-0.136,0.0796
