@@ -58,6 +58,18 @@ Strategic Translation (DATA → INSIGHT → BUSINESS IMPLICATION → STRATEGIC C
 
 **Category-level (COICOP) spending** (OECD, 36 countries): evaluated and initially descoped in v1 because the SDMX API's query structure could not be resolved; **resolved in v2** by properly discovering the API's dimension keys rather than guessing. See [`docs/SOURCES.md`](docs/SOURCES.md) for the fix and [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) for the coverage caveat (36 countries, not the full 182-country panel).
 
+## Notebooks
+
+| # | Question | Data Rigor |
+|---|---|---|
+| [01: Data Collection](./notebooks/01_data_collection.ipynb) | Which source, and why World Bank over IMF or OECD for the core panel? | PUBLIC |
+| [02: Data Cleaning](./notebooks/02_data_cleaning.ipynb) | How does a raw World Bank pull become one clean 182-country panel with a defensible region map? | PUBLIC + DERIVED |
+| [03: Exploratory Analysis](./notebooks/03_exploratory_analysis.ipynb) | What does the data actually look like before any modelling, and where are the real outliers? | PUBLIC |
+| [04: Regional Analysis](./notebooks/04_regional_analysis.ipynb) | How much does each region spend, and how fast is that changing? | PUBLIC |
+| [05: Spending Analysis](./notebooks/05_spending_analysis.ipynb) | What actually predicts spending: income, inflation, digitalisation? | PUBLIC |
+| [06: Segmentation](./notebooks/06_segmentation.ipynb) | What natural market groupings does the data itself produce, without assuming the answer? | PUBLIC + DERIVED |
+| [07: Strategy Analysis](./notebooks/07_strategy_analysis.ipynb) | Given all of the above, which markets are actually attractive, and what should a business do about it? | PUBLIC + DERIVED |
+
 ## Methodology
 
 Full write-up: [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md). In brief: real (constant-2015-USD) series are used for every growth/CAGR calculation, to isolate volume growth from inflation and exchange-rate effects; PPP-adjusted GDP per capita is used for income comparisons; nominal-USD is used only for market-size totals (with the exchange-rate caveat stated explicitly). Correlation analysis never claims causation. Market segmentation uses K-Means with k chosen by silhouette score, not assumed. The market attractiveness index uses five equal-weighted, min-max normalised pillars (including a Market Stability pillar added in v2) with a documented sensitivity check (Spearman ρ=0.992 against a growth-double-weighted alternative).
@@ -79,6 +91,18 @@ Full write-up: [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md). In brief: real (con
 **7. Adding a real governance dimension changes specific countries' standing, not just the top of the ranking.** With the v2 Market Stability pillar (political stability, rule of law, regulatory quality) added, Lebanon's stability sub-score is 26.5/100, genuinely weak, and it now ranks 122nd of 183 rather than scoring as merely "moderate" on the original four fundamentals-only pillars. Argentina's stability sub-score (49.3) is closer to the middle of the pack, reflecting that its market-size and spending-power fundamentals are doing more of the work in its 79th-place rank than its stability is dragging it down.
 
 **8. Engel's Law holds strongly in this data.** Across 36 countries with real OECD category-level spending data, food's share of household spending falls sharply as income rises, from ~25% of spending in Mexico and Romania to under 10% in the United States, United Kingdom, and Ireland (Pearson r=-0.74, p<0.001). This is one of the oldest, most replicated findings in household economics, and this project's own data reproduces it cleanly, a strong internal-consistency check on the newly-added category data as much as a finding in its own right.
+
+## Explain It Simply
+
+Imagine trying to answer three questions a business would actually ask before going global: where in the world do people spend the most money, where is spending growing fastest, and which countries would actually be smart bets to enter? This project builds one clean dataset covering 182 countries and answers those questions directly with real numbers, rather than repeating the usual headlines ("China is huge," "Southeast Asia is the next big thing") without checking whether they still hold up.
+
+Three findings that go against the obvious assumption:
+
+- **The biggest markets and the fastest-growing markets are mostly different countries.** North America is where the money already is; the fastest growth is happening somewhere else entirely (South & Southeast Asia). A business chasing "the biggest market" and a business chasing "the fastest-growing market" probably shouldn't be looking at the same country.
+- **A country being more online doesn't mean its spending is growing faster,** it's actually the opposite. Heavy internet use looks more like a sign a market has already "arrived" (mature, slower-growing) than a sign it's about to take off.
+- **Food's share of spending falls as a country gets richer,** confirmed directly in this project's own real data: poorer countries spend up to a quarter of their budget on food, richer ones under a tenth. This is a 200-year-old finding in economics (Engel's Law, see Glossary), and the fact that this project's own numbers reproduce it cleanly is itself a good sign the rest of the data behind this project can be trusted.
+
+Put together, this project builds a "market attractiveness score" for every country, not just based on how big or rich it is, but also how fast it's growing, how digitally ready it is, and (added in a later revision) how politically and economically stable it is, and shows the full working openly so a reader can recompute the ranking with their own priorities instead of just trusting one number. (New to terms like "COICOP," "CAGR," or "K-Means clustering"? See the Glossary near the bottom.)
 
 ## Global Consumer Spending Landscape
 
@@ -217,6 +241,18 @@ project-007-global-consumer-spending/
 ## Sources
 
 Full citations: [`docs/SOURCES.md`](docs/SOURCES.md).
+
+## Glossary
+
+Plain-language definitions for the technical terms used in this project.
+
+- **CAGR (Compound Annual Growth Rate):** The average yearly growth rate of something over several years, as if it had grown at one smooth, steady pace instead of jumping around. Useful for comparing growth across countries that grew unevenly.
+- **PPP (Purchasing Power Parity):** An adjustment to income and GDP figures that corrects for the fact that a dollar buys more in a cheaper country than in an expensive one, so income can be compared fairly across countries.
+- **COICOP:** The international standard list of household spending categories (food, housing, transport, etc.) used by statistical agencies worldwide, so category-level spending data means the same thing in every country that publishes it.
+- **K-Means clustering:** A data-driven way of sorting a group (here, countries) into a small number of similar clusters based on their numbers, without a person deciding the groups in advance.
+- **Governance indicators (WGI):** World Bank-published scores estimating how politically stable, rule-of-law-abiding, and well-regulated a country is, expressed as a percentile rank against every other country in the world.
+- **Engel's Law:** A roughly 200-year-old finding in economics that as household income rises, the *share* of it spent on food falls, even though the actual amount spent on food usually still goes up.
+- **PUBLIC / DERIVED / ESTIMATED:** How traceable a number in this project is. **PUBLIC** = taken directly from an official source. **DERIVED** = built by combining or calculating from official sources this project directly fetched and read. **ESTIMATED** = based on a secondary source that couldn't be independently verified. See [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) for exactly how every number here was classified.
 
 ## Author
 
