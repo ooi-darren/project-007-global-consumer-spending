@@ -1,5 +1,5 @@
 """
-World Bank data collection for Project 007 — Global Consumer Spending Intelligence.
+World Bank data collection for Project 007: Global Consumer Spending Intelligence.
 
 Pulls indicators from the World Bank Open Data API (api.worldbank.org/v2), which
 requires no authentication and is redistributable (World Bank Open Data is CC-BY 4.0).

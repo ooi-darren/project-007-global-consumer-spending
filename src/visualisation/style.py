@@ -1,12 +1,12 @@
-# House chart style v2 — consulting-exhibit conventions (MBB-style):
-# gray for context series, one or two accent colors for what the title is
+# House chart style v2: consulting-exhibit conventions (MBB-style).
+# Gray for context series, one or two accent colors for what the title is
 # actually about, direct end-of-line/bar labels instead of a legend box.
 import matplotlib.pyplot as plt
 
-ACCENT_1 = '#2a78d6'   # primary accent — the series the title is about
-ACCENT_2 = '#eb6834'   # secondary accent — used only for genuine two-way comparisons
+ACCENT_1 = '#2a78d6'   # primary accent, the series the title is about
+ACCENT_2 = '#eb6834'   # secondary accent, used only for genuine two-way comparisons
                         # or a title that names two co-equal findings
-GRAY = '#9a9a95'        # de-emphasized / context series — same family, faded out
+GRAY = '#9a9a95'        # de-emphasized / context series, same family, faded out
 INK, INK_SECONDARY, INK_MUTED = '#0b0b0b', '#52514e', '#898781'
 GRID, SURFACE = '#ececea', '#fcfcfb'
 

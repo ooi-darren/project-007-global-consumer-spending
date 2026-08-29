@@ -1,43 +1,43 @@
-# Project 007 — Global Consumer Spending Intelligence
+# Project 007: Global Consumer Spending Intelligence
 
 <img src="./outputs/figures/01_global_spending_map.png" width="800" alt="Global map of consumer spending per capita, concentrated in North America, Europe, and wealthy East Asia/Gulf states">
 
-**Part of a [7-case-study portfolio](https://github.com/ooi-darren)** — the first to move beyond a single country into a genuinely global panel.
+**Part of a [7-case-study portfolio](https://github.com/ooi-darren)**, the first to move beyond a single country into a genuinely global panel.
 
 ## Executive Summary
 
-This project builds and analyses a 182-country, 11-year (2013–2023) consumer-spending intelligence panel from World Bank Open Data, to test whether — and how — consumer spending behaviour actually differs across global regions, rather than assuming the answer. It finds that market **size** and market **growth** are almost unrelated (the countries with the biggest consumer markets are rarely the fastest-growing ones), that income remains the single strongest predictor of spending levels (r=0.88), that digital penetration now behaves more like a marker of market maturity than a growth driver, and that a data-driven clustering of 146 countries produces four distinct, interpretable market archetypes — including a small but real "crisis markets" segment (Argentina, Lebanon). A transparent, sensitivity-tested, **five**-pillar market attractiveness index — now including a Market Stability pillar built from governance indicators — ranks 182 countries; the United States tops it by a wide margin, driven overwhelmingly by scale rather than growth, while the added stability pillar measurably pulls Lebanon down the ranking rather than letting it score as merely "moderate." Real category-level spending data (36 countries) confirms Engel's Law holds strongly in this data: richer countries spend a significantly smaller share of household budgets on food (r=-0.74, p<0.001).
+This project builds and analyses a 182-country, 11-year (2013–2023) consumer-spending intelligence panel from World Bank Open Data, to test whether (and how) consumer spending behaviour actually differs across global regions, rather than assuming the answer. It finds that market **size** and market **growth** are almost unrelated (the countries with the biggest consumer markets are rarely the fastest-growing ones), that income remains the single strongest predictor of spending levels (r=0.88), that digital penetration now behaves more like a marker of market maturity than a growth driver, and that a data-driven clustering of 146 countries produces four distinct, interpretable market archetypes, including a small but real "crisis markets" segment (Argentina, Lebanon). A transparent, sensitivity-tested, **five**-pillar market attractiveness index (now including a Market Stability pillar built from governance indicators) ranks 182 countries; the United States tops it by a wide margin, driven overwhelmingly by scale rather than growth, while the added stability pillar measurably pulls Lebanon down the ranking rather than letting it score as merely "moderate." Real category-level spending data (36 countries) confirms Engel's Law holds strongly in this data: richer countries spend a significantly smaller share of household budgets on food (r=-0.74, p<0.001).
 
 ## Research Question
 
 **How does consumer spending behaviour differ across global regions, and what economic, demographic, and technological factors help explain these differences?**
 
-Eleven secondary questions (market size, growth, income relationship, inflation, spending composition, digitalisation, demographics, market maturity, and strategic implications) are addressed directly in Notebooks 03–07 — see **Key Findings** below for the answers this project actually found, not assumed.
+Eleven secondary questions (market size, growth, income relationship, inflation, spending composition, digitalisation, demographics, market maturity, and strategic implications) are addressed directly in Notebooks 03–07. See **Key Findings** below for the answers this project actually found, not assumed.
 
 ## Why This Research Matters
 
-Businesses evaluating international expansion routinely rely on qualitative or anecdotal claims about "emerging market growth" or "mature market saturation." This project tests those claims against 182 countries' worth of actual, publicly sourced economic data, using a transparent, reproducible methodology — the kind of evidence base a strategy or consumer-intelligence team would need before a real market-entry recommendation, not a dashboard of unexamined numbers.
+Businesses evaluating international expansion routinely rely on qualitative or anecdotal claims about "emerging market growth" or "mature market saturation." This project tests those claims against 182 countries' worth of actual, publicly sourced economic data, using a transparent, reproducible methodology, the kind of evidence base a strategy or consumer-intelligence team would need before a real market-entry recommendation, not a dashboard of unexamined numbers.
 
 ## Global Research Coverage
 
-- **182 countries** with usable consumer-spending data (of 217 World Bank economies evaluated — 84% coverage; see `docs/DATA_COVERAGE.md` for exactly which 35 were excluded and why)
+- **182 countries** with usable consumer-spending data (of 217 World Bank economies evaluated, 84% coverage; see `docs/DATA_COVERAGE.md` for exactly which 35 were excluded and why)
 - **11 years** (2013–2023) per country where available
 - **8 project regions**, built from the UN M49 standard with three documented overrides (`data/processed/REGION_MAPPING.csv`)
-- **14 core indicators** per country-year: population, GDP (nominal and PPP), consumer spending (nominal, real, per-capita, % of GDP), inflation, unemployment, urbanisation, internet penetration, age structure — all from a single primary source (World Bank) to avoid cross-source definitional mismatches
-- **+3 governance indicators** (political stability, rule of law, regulatory quality — World Bank WGI) powering the Market Stability pillar, and **+12-category household spending detail for 36 countries** (OECD) — both added in v2, see Data Sources below
+- **14 core indicators** per country-year: population, GDP (nominal and PPP), consumer spending (nominal, real, per-capita, % of GDP), inflation, unemployment, urbanisation, internet penetration, age structure; all from a single primary source (World Bank) to avoid cross-source definitional mismatches
+- **+3 governance indicators** (political stability, rule of law, regulatory quality, World Bank WGI) powering the Market Stability pillar, and **+12-category household spending detail for 36 countries** (OECD); both added in v2, see Data Sources below
 
 ## Research Framework
 
 ```
 Data Acquisition (World Bank API)
         │
-Data Engineering (region mapping, cleaning, derived metrics — CAGR, growth, shares)
+Data Engineering (region mapping, cleaning, derived metrics: CAGR, growth, shares)
         │
 Exploratory Analysis (distributions, outliers)
         │
 Regional Analysis (size, growth, trends by region)
         │
-Spending-Relationship Analysis (income, inflation, digitalisation — correlation only)
+Spending-Relationship Analysis (income, inflation, digitalisation, correlation only)
         │
 Market Segmentation (K-Means, k selected by silhouette score)
         │
@@ -48,15 +48,15 @@ Strategic Translation (DATA → INSIGHT → BUSINESS IMPLICATION → STRATEGIC C
 
 ## Data Sources
 
-**Primary source: World Bank Open Data** (`api.worldbank.org`, CC-BY 4.0, no authentication required) — selected after evaluating IMF and OECD specifically because it is the only Tier-1 source with a direct household-consumption-expenditure indicator at 180+ country coverage. Full evaluation and citations: [`docs/SOURCES.md`](docs/SOURCES.md).
+**Primary source: World Bank Open Data** (`api.worldbank.org`, CC-BY 4.0, no authentication required), selected after evaluating IMF and OECD specifically because it is the only Tier-1 source with a direct household-consumption-expenditure indicator at 180+ country coverage. Full evaluation and citations: [`docs/SOURCES.md`](docs/SOURCES.md).
 
 **Regional classification**: UN M49 standard, via the ISO-3166-Countries-with-Regional-Codes public compilation.
 
 **Geographic boundaries** (for the choropleth map): Natural Earth (public domain).
 
-**Governance indicators** (World Bank Worldwide Governance Indicators — political stability, rule of law, regulatory quality): same World Bank API, added in v2 to power the Market Attractiveness Index's Market Stability pillar.
+**Governance indicators** (World Bank Worldwide Governance Indicators: political stability, rule of law, regulatory quality): same World Bank API, added in v2 to power the Market Attractiveness Index's Market Stability pillar.
 
-**Category-level (COICOP) spending** (OECD, 36 countries): evaluated and initially descoped in v1 because the SDMX API's query structure could not be resolved; **resolved in v2** by properly discovering the API's dimension keys rather than guessing — see [`docs/SOURCES.md`](docs/SOURCES.md) for the fix and [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) for the coverage caveat (36 countries, not the full 182-country panel).
+**Category-level (COICOP) spending** (OECD, 36 countries): evaluated and initially descoped in v1 because the SDMX API's query structure could not be resolved; **resolved in v2** by properly discovering the API's dimension keys rather than guessing. See [`docs/SOURCES.md`](docs/SOURCES.md) for the fix and [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) for the coverage caveat (36 countries, not the full 182-country panel).
 
 ## Methodology
 
@@ -64,21 +64,21 @@ Full write-up: [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md). In brief: real (con
 
 ## Key Findings
 
-**1. Market size and market growth are nearly unrelated.** North America holds ~34% of global consumer spending with median real CAGR of only ~1.6%; South & Southeast Asia holds ~8% of global spending but is growing at median ~4.6% — more than double North America's rate, from a much smaller base.
+**1. Market size and market growth are nearly unrelated.** North America holds ~34% of global consumer spending with median real CAGR of only ~1.6%; South & Southeast Asia holds ~8% of global spending but is growing at median ~4.6%, more than double North America's rate, from a much smaller base.
 
-**2. Income is the strongest single predictor of spending levels (r=0.88, n=166).** GDP per capita (PPP) and consumption per capita move together closely across the full country sample — the expected relationship, and a useful sanity check that the underlying data behaves as economic theory predicts.
+**2. Income is the strongest single predictor of spending levels (r=0.88, n=166).** GDP per capita (PPP) and consumption per capita move together closely across the full country sample, the expected relationship, and a useful sanity check that the underlying data behaves as economic theory predicts.
 
-**3. Digitalisation now reads as a maturity marker, not a growth driver.** Internet penetration correlates positively with spending *level* (r=0.61) but *negatively* with spending *growth* (r=-0.22) — already-online markets are typically large and mature, not fast-growing.
+**3. Digitalisation now reads as a maturity marker, not a growth driver.** Internet penetration correlates positively with spending *level* (r=0.61) but *negatively* with spending *growth* (r=-0.22); already-online markets are typically large and mature, not fast-growing.
 
-**4. Inflation shows no simple linear relationship with real spending growth at the country-year level** (r=-0.08, not statistically significant, n=153, p=0.31) — a genuinely "no relationship found" result, reported as such rather than forced into a narrative.
+**4. Inflation shows no simple linear relationship with real spending growth at the country-year level** (r=-0.08, not statistically significant, n=153, p=0.31), a genuinely "no relationship found" result, reported as such rather than forced into a narrative.
 
-**5. Four data-driven market segments emerge from clustering** (see below) — including a real, small "crisis markets" cluster (Argentina, Lebanon) that ordinary attractiveness metrics would otherwise misread.
+**5. Four data-driven market segments emerge from clustering** (see below), including a real, small "crisis markets" cluster (Argentina, Lebanon) that ordinary attractiveness metrics would otherwise misread.
 
-**6. The market attractiveness ranking is dominated by the United States** (score 87.1, next-highest Switzerland at 71.6) — almost entirely a market-size effect, not a growth or per-capita-spending effect; see the Market Attractiveness section below.
+**6. The market attractiveness ranking is dominated by the United States** (score 87.1, next-highest Switzerland at 71.6), almost entirely a market-size effect, not a growth or per-capita-spending effect; see the Market Attractiveness section below.
 
-**7. Adding a real governance dimension changes specific countries' standing, not just the top of the ranking.** With the v2 Market Stability pillar (political stability, rule of law, regulatory quality) added, Lebanon's stability sub-score is 26.5/100 — genuinely weak, and it now ranks 122nd of 183 rather than scoring as merely "moderate" on the original four fundamentals-only pillars. Argentina's stability sub-score (49.3) is closer to the middle of the pack, reflecting that its market-size and spending-power fundamentals are doing more of the work in its 79th-place rank than its stability is dragging it down.
+**7. Adding a real governance dimension changes specific countries' standing, not just the top of the ranking.** With the v2 Market Stability pillar (political stability, rule of law, regulatory quality) added, Lebanon's stability sub-score is 26.5/100, genuinely weak, and it now ranks 122nd of 183 rather than scoring as merely "moderate" on the original four fundamentals-only pillars. Argentina's stability sub-score (49.3) is closer to the middle of the pack, reflecting that its market-size and spending-power fundamentals are doing more of the work in its 79th-place rank than its stability is dragging it down.
 
-**8. Engel's Law holds strongly in this data.** Across 36 countries with real OECD category-level spending data, food's share of household spending falls sharply as income rises — from ~25% of spending in Mexico and Romania to under 10% in the United States, United Kingdom, and Ireland (Pearson r=-0.74, p<0.001). This is one of the oldest, most replicated findings in household economics, and this project's own data reproduces it cleanly — a strong internal-consistency check on the newly-added category data as much as a finding in its own right.
+**8. Engel's Law holds strongly in this data.** Across 36 countries with real OECD category-level spending data, food's share of household spending falls sharply as income rises, from ~25% of spending in Mexico and Romania to under 10% in the United States, United Kingdom, and Ireland (Pearson r=-0.74, p<0.001). This is one of the oldest, most replicated findings in household economics, and this project's own data reproduces it cleanly, a strong internal-consistency check on the newly-added category data as much as a finding in its own right.
 
 ## Global Consumer Spending Landscape
 
@@ -99,9 +99,9 @@ Full regional profile table: `outputs/tables/regional_profiles.csv`.
 
 Condensed here; the full economic / consumer / digital / demographic / behavioural-interpretation profile for every region is built directly from the tables above and Notebooks 03–05. Two illustrative examples:
 
-**North America** — Economic: highest income and spending base globally. Consumer: largest absolute market (33.9% of global spending) but slowest-growing among major regions (1.6% median CAGR) — a mature, scale market. Digital: near-universal internet penetration. *Behavioural interpretation (evidence-consistent, not directly measured): premiumisation and convenience are more likely purchase drivers than price in an already-saturated, high-income, highly-digital market.*
+**North America.** Economic: highest income and spending base globally. Consumer: largest absolute market (33.9% of global spending) but slowest-growing among major regions (1.6% median CAGR), a mature, scale market. Digital: near-universal internet penetration. *Behavioural interpretation (evidence-consistent, not directly measured): premiumisation and convenience are more likely purchase drivers than price in an already-saturated, high-income, highly-digital market.*
 
-**South & Southeast Asia** — Economic: low-to-middle income base. Consumer: smallest of the fast-growing regions by absolute share (8.0%) but fastest median growth (4.6%) of any region. Digital: internet penetration still has meaningfully more room to expand than in mature regions. *Behavioural interpretation: a market still building its digital and retail infrastructure, where price sensitivity is likely to remain a stronger purchase driver than in mature markets, alongside rapid genuine volume growth.*
+**South & Southeast Asia.** Economic: low-to-middle income base. Consumer: smallest of the fast-growing regions by absolute share (8.0%) but fastest median growth (4.6%) of any region. Digital: internet penetration still has meaningfully more room to expand than in mature regions. *Behavioural interpretation: a market still building its digital and retail infrastructure, where price sensitivity is likely to remain a stronger purchase driver than in mature markets, alongside rapid genuine volume growth.*
 
 ## Consumer Market Segmentation
 
@@ -118,21 +118,21 @@ Full segment interpretation and methodology: Notebook 06, `docs/METHODOLOGY.md`.
 
 ## Market Attractiveness
 
-Transparent, **five-pillar** (Market Size, Market Growth, Spending Power, Digital Readiness, and — added in v2 — Market Stability), equal-weighted, min-max-normalised composite score across 183 countries. Full methodology, including the sensitivity check: [`MARKET_ATTRACTIVENESS_METHODOLOGY.md`](MARKET_ATTRACTIVENESS_METHODOLOGY.md).
+Transparent, **five-pillar** (Market Size, Market Growth, Spending Power, Digital Readiness, and (added in v2) Market Stability), equal-weighted, min-max-normalised composite score across 183 countries. Full methodology, including the sensitivity check: [`MARKET_ATTRACTIVENESS_METHODOLOGY.md`](MARKET_ATTRACTIVENESS_METHODOLOGY.md).
 
 **Top 10:** United States (87.1), Switzerland (71.6), Norway (70.0), Luxembourg (69.8), Australia (67.4), Iceland (66.3), New Zealand (64.8), Denmark (64.6), United Kingdom (64.4), Ireland (63.5).
 
-The ranking is dominated by scale — the US score is driven overwhelmingly by market size, not growth or per-capita spending, which is itself an important finding: a naive "top market" list built on this composite will structurally favour large mature economies over genuinely high-growth smaller ones, exactly the kind of distortion Section 14 of the original brief warns a composite score can introduce if not read carefully.
+The ranking is dominated by scale: the US score is driven overwhelmingly by market size, not growth or per-capita spending, which is itself an important finding: a naive "top market" list built on this composite will structurally favour large mature economies over genuinely high-growth smaller ones, exactly the kind of distortion Section 14 of the original brief warns a composite score can introduce if not read carefully.
 
-**What the v2 Market Stability pillar changes:** v1's four fundamentals-only pillars let Argentina and Lebanon both score as merely "moderate" despite active macro/currency crises — a real gap, named explicitly in v1's own Limitations. With Market Stability added, Lebanon's stability sub-score (26.5/100) pulls it to 122nd of 183; Argentina's (49.3/100) is closer to the middle of the pack, so its 79th-place rank is still driven more by its market-size and spending-power fundamentals than corrected by the new pillar. This is a measurable, direction-correct effect of the added dimension, not a cosmetic one — but "stability" here is still one specific 3-indicator operationalisation, not a substitute for real country-risk due diligence (see `docs/LIMITATIONS.md` item 7). Full ranking: `outputs/tables/market_attractiveness_ranking.csv`.
+**What the v2 Market Stability pillar changes:** v1's four fundamentals-only pillars let Argentina and Lebanon both score as merely "moderate" despite active macro/currency crises, a real gap, named explicitly in v1's own Limitations. With Market Stability added, Lebanon's stability sub-score (26.5/100) pulls it to 122nd of 183; Argentina's (49.3/100) is closer to the middle of the pack, so its 79th-place rank is still driven more by its market-size and spending-power fundamentals than corrected by the new pillar. This is a measurable, direction-correct effect of the added dimension, not a cosmetic one, but "stability" here is still one specific 3-indicator operationalisation, not a substitute for real country-risk due diligence (see `docs/LIMITATIONS.md` item 7). Full ranking: `outputs/tables/market_attractiveness_ranking.csv`.
 
 ## Strategic Implications
 
 Full DATA → INSIGHT → BUSINESS IMPLICATION → STRATEGIC CONSIDERATION write-ups for three major findings are in **Notebook 07**. Summary:
 
-1. **Scale markets and growth markets require different playbooks** — market size and growth are nearly uncorrelated, so a single global entry strategy is unlikely to serve both large mature markets and small high-growth ones well.
+1. **Scale markets and growth markets require different playbooks**; market size and growth are nearly uncorrelated, so a single global entry strategy is unlikely to serve both large mature markets and small high-growth ones well.
 2. **Digital-first entry is table stakes in mature/emerging-upper-middle markets, but digital-infrastructure investment itself may be the bigger near-term opportunity in the fastest-growing (Lower-Spending Developing) segment**, where internet penetration still has substantial room to expand.
-3. **Macro instability can invalidate standard attractiveness signals — and a stability dimension needs to be measured, not assumed.** v1 of this index scored Argentina and Lebanon as merely "moderate" on demographic/digital fundamentals alone, despite active currency crises. Adding a real Market Stability pillar in v2 measurably corrects this for Lebanon (dropping it to 122nd of 183) but only partially for Argentina (79th, still buoyed by market size) — illustrating that even a stability-aware composite score is not a substitute for a dedicated macro-risk gating filter in a real capital-allocation decision.
+3. **Macro instability can invalidate standard attractiveness signals, and a stability dimension needs to be measured, not assumed.** v1 of this index scored Argentina and Lebanon as merely "moderate" on demographic/digital fundamentals alone, despite active currency crises. Adding a real Market Stability pillar in v2 measurably corrects this for Lebanon (dropping it to 122nd of 183) but only partially for Argentina (79th, still buoyed by market size), illustrating that even a stability-aware composite score is not a substitute for a dedicated macro-risk gating filter in a real capital-allocation decision.
 
 ## Visualisations
 
@@ -143,18 +143,18 @@ Full DATA → INSIGHT → BUSINESS IMPLICATION → STRATEGIC CONSIDERATION write
 3. Consumer spending per capita, top 20 markets
 4. Consumer spending growth by region (distribution)
 5. Regional spending trends, indexed 2013=100
-6. **Food's share of spending vs. income — Engel's Law** (real OECD category data, 36 countries; replaces v1's GDP-share substitute now that the category-data gap is closed — see Limitations)
+6. **Food's share of spending vs. income (Engel's Law)** (real OECD category data, 36 countries; replaces v1's GDP-share substitute now that the category-data gap is closed. See Limitations)
 7. Income vs. consumer spending
 8. Inflation vs. spending growth
 9. Digitalisation vs. spending
 10. Country segmentation (K-Means, PCA-visualised)
 11. Market attractiveness matrix (growth × spending power × market-size bubble)
 12. Regional comparison dashboard (4-panel)
-13. *(Supplementary, beyond the required 12)* Spending category composition — 4 major categories, 18 selected countries
+13. *(Supplementary, beyond the required 12)* Spending category composition: 4 major categories, 18 selected countries
 
 ## Limitations
 
-Full document: [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md). Headline items: category-level spending is real but limited to 36 countries, not the full panel (v1's total descope resolved in v2 — see Limitations item 1); 35 of 217 countries (including Nigeria) have no consumption data and are excluded; regional classification is a documented judgment call, not an official standard; all correlations are explicitly non-causal; the market-attractiveness weighting (now 5 pillars) is a stated simplification, not an optimum, and the new Market Stability pillar narrows the fully-comparable sample to 153 countries.
+Full document: [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md). Headline items: category-level spending is real but limited to 36 countries, not the full panel (v1's total descope resolved in v2. See Limitations item 1); 35 of 217 countries (including Nigeria) have no consumption data and are excluded; regional classification is a documented judgment call, not an official standard; all correlations are explicitly non-causal; the market-attractiveness weighting (now 5 pillars) is a stated simplification, not an optimum, and the new Market Stability pillar narrows the fully-comparable sample to 153 countries.
 
 ## Reproducibility
 
@@ -220,4 +220,4 @@ Full citations: [`docs/SOURCES.md`](docs/SOURCES.md).
 
 ## Author
 
-Darren Ooi — [LinkedIn](https://www.linkedin.com/in/darrenooizhixian)
+Darren Ooi, [LinkedIn](https://www.linkedin.com/in/darrenooizhixian)

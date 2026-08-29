@@ -41,7 +41,7 @@ merged.plot(column="household_consumption_expenditure_per_capita_constant_2015_u
             edgecolor="white", linewidth=0.3)
 ax.set_title("Consumer spending per capita is heavily concentrated in North America, Europe, and wealthy East Asia/Gulf states", loc='left', fontsize=13)
 ax.set_axis_off()
-add_source(fig, f"Source: World Bank, Household Final Consumption Expenditure per capita (constant 2015 US$) — PUBLIC. {snap['Year'].mode()[0]:.0f} or latest available year per country; grey = no data.")
+add_source(fig, f"Source: World Bank, Household Final Consumption Expenditure per capita (constant 2015 US$), PUBLIC. {snap['Year'].mode()[0]:.0f} or latest available year per country; grey = no data.")
 save(fig, "01_global_spending_map")
 
 # ---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ for b in bars:
                 xytext=(5, 0), textcoords="offset points", va="center", fontsize=10)
 ax.set_title("North America alone accounts for over a third of global consumer spending", loc="left")
 ax.set_xlabel("Total household consumption expenditure (USD trillion)")
-add_source(fig, "Source: World Bank Household Final Consumption Expenditure, latest available year per country — PUBLIC.")
+add_source(fig, "Source: World Bank Household Final Consumption Expenditure, latest available year per country, PUBLIC.")
 save(fig, "02_spending_by_region")
 
 # ---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ ax.set_title("The 20 highest consumer-spending-per-capita markets globally", loc
 ax.set_xlabel("Consumption per capita (constant 2015 USD)")
 handles = [mpatches.Patch(color=ACCENT_1, label='North America'), mpatches.Patch(color=ACCENT_2, label='East Asia'), mpatches.Patch(color=GRAY, label='Other regions')]
 ax.legend(handles=handles, loc='lower right', fontsize=9)
-add_source(fig, "Source: World Bank Household Final Consumption Expenditure per capita, constant 2015 US$ — PUBLIC.")
+add_source(fig, "Source: World Bank Household Final Consumption Expenditure per capita, constant 2015 US$, PUBLIC.")
 save(fig, "03_spending_per_capita_top20")
 
 # ---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ ax.set_yticklabels(order, fontsize=9.5)
 ax.axvline(0, color=INK_MUTED, linewidth=1, linestyle=(0, (3, 3)))
 ax.set_title("South & Southeast Asia and Africa show the fastest real consumption growth (2013–2023)", loc="left")
 ax.set_xlabel("Real consumption CAGR, 2013–2023 (%)")
-add_source(fig, "Source: World Bank, real (constant 2015 USD) household consumption CAGR per country — PUBLIC. Orange dots = outlier countries within their region.")
+add_source(fig, "Source: World Bank, real (constant 2015 USD) household consumption CAGR per country, PUBLIC. Orange dots = outlier countries within their region.")
 save(fig, "04_spending_growth_by_region")
 
 # ---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ for region in indexed.columns:
 ax.axhline(100, color=INK_MUTED, linewidth=0.8, linestyle=(0, (2, 2)))
 ax.set_title("Indexed to 2013=100: South & Southeast Asia's consumption base has grown fastest", loc="left")
 ax.set_ylabel("Real consumption, indexed (2013 = 100)")
-add_source(fig, "Source: World Bank, real household consumption expenditure summed by region, constant 2015 US$ — PUBLIC.")
+add_source(fig, "Source: World Bank, real household consumption expenditure summed by region, constant 2015 US$, PUBLIC.")
 save(fig, "05_regional_trends_indexed")
 
 # ---------------------------------------------------------------------------
@@ -136,8 +136,8 @@ ax.set_xlabel("GDP per capita, PPP (current international $)")
 ax.set_ylabel("Food & non-alcoholic beverages, % of household spending")
 ax.text(0.98, 0.95, f"Pearson r = {r:.2f}  (p < 0.001, n = {len(c6)})", transform=ax.transAxes,
         ha="right", va="top", fontsize=10, color=INK_SECONDARY, style="italic")
-add_source(fig, "Source: OECD SDMX (Household final consumption expenditure by COICOP purpose) merged with World Bank GDP per capita, PPP — PUBLIC. "
-                 "36 countries with complete category-level data (OECD members + partners); not the full 182-country panel — see docs/LIMITATIONS.md.")
+add_source(fig, "Source: OECD SDMX (Household final consumption expenditure by COICOP purpose) merged with World Bank GDP per capita, PPP, PUBLIC. "
+                 "36 countries with complete category-level data (OECD members + partners); not the full 182-country panel, see docs/LIMITATIONS.md.")
 save(fig, "06_food_share_vs_income_engels_law")
 
 # ---------------------------------------------------------------------------
@@ -149,11 +149,11 @@ for region in REGION_ORDER:
     sub = d[d["Project_007_Region"] == region]
     ax.scatter(sub["gdp_per_capita_ppp_current_intl"], sub["household_consumption_expenditure_per_capita_constant_2015_usd"],
                s=35, alpha=0.75, color=REGION_COLORS.get(region, GRAY), label=region, edgecolor='white', linewidth=0.3)
-ax.set_title("Income and consumer spending are tightly linked (r = 0.88) — but with real regional spread", loc="left")
+ax.set_title("Income and consumer spending are tightly linked (r = 0.88), but with real regional spread", loc="left")
 ax.set_xlabel("GDP per capita, PPP (current international $)")
 ax.set_ylabel("Consumption per capita (constant 2015 USD)")
 ax.legend(fontsize=8, loc='upper left', ncol=1)
-add_source(fig, "Source: World Bank — PUBLIC. Pearson r=0.88, n=166 countries with both indicators available.")
+add_source(fig, "Source: World Bank, PUBLIC. Pearson r=0.88, n=166 countries with both indicators available.")
 save(fig, "07_income_vs_spending")
 
 # ---------------------------------------------------------------------------
@@ -167,7 +167,7 @@ ax.axhline(0, color=INK_MUTED, linewidth=0.8)
 ax.set_title("No strong relationship between annual inflation and real spending growth (r = -0.08, n.s.)", loc="left")
 ax.set_xlabel("Inflation, consumer prices (annual %)")
 ax.set_ylabel("Real household consumption growth, YoY (%)")
-add_source(fig, "Source: World Bank, country-year observations 2013–2023 — PUBLIC. Chart excludes inflation >50% or <-10% for readability (extreme crisis years); correlation computed on full range.")
+add_source(fig, "Source: World Bank, country-year observations 2013–2023, PUBLIC. Chart excludes inflation >50% or <-10% for readability (extreme crisis years); correlation computed on full range.")
 save(fig, "08_inflation_vs_growth")
 
 # ---------------------------------------------------------------------------
@@ -184,7 +184,7 @@ ax.set_title("Higher internet penetration tracks higher spending per capita (r =
 ax.set_xlabel("Internet users (% of population)")
 ax.set_ylabel("Consumption per capita, log scale (constant 2015 USD)")
 ax.legend(fontsize=8, loc='upper left')
-add_source(fig, "Source: World Bank — PUBLIC. Pearson r=0.61 (log not used in correlation calc), n=154.")
+add_source(fig, "Source: World Bank, PUBLIC. Pearson r=0.61 (log not used in correlation calc), n=154.")
 save(fig, "09_digitalisation_vs_spending")
 
 # ---------------------------------------------------------------------------
@@ -206,7 +206,7 @@ ax.set_title("Four data-driven consumer-market archetypes emerge from K-Means cl
 ax.set_xlabel("PCA dimension 1 (53% of variance)")
 ax.set_ylabel("PCA dimension 2 (20% of variance)")
 ax.legend(fontsize=8.5, loc='best')
-add_source(fig, "Source: K-Means clustering on standardised GDP/capita, consumption/capita, CAGR, internet %, urban %, inflation — n=146 countries with complete data. See docs/METHODOLOGY.md.")
+add_source(fig, "Source: K-Means clustering on standardised GDP/capita, consumption/capita, CAGR, internet %, urban %, inflation. n=146 countries with complete data; see docs/METHODOLOGY.md.")
 save(fig, "10_country_segmentation")
 
 # ---------------------------------------------------------------------------
@@ -229,7 +229,7 @@ ax.set_title("Market attractiveness matrix: growth vs. spending power (bubble si
 ax.set_xlabel("Real consumption CAGR, 2013–2023 (%)")
 ax.set_ylabel("Consumption per capita, log scale (constant 2015 USD)")
 ax.legend(fontsize=7.5, loc='lower left', ncol=2)
-add_source(fig, "Source: World Bank — PUBLIC. Bubble size = total household consumption expenditure. Labels = top 12 by composite attractiveness score.")
+add_source(fig, "Source: World Bank, PUBLIC. Bubble size = total household consumption expenditure. Labels = top 12 by composite attractiveness score.")
 save(fig, "11_market_attractiveness_matrix")
 
 # ---------------------------------------------------------------------------
@@ -255,16 +255,16 @@ ax.barh(r.index[::-1], r["median_internet_pct"][::-1], color='#5a9bd6')
 ax.set_title("Median internet penetration (%)", loc='left', fontsize=11.5)
 
 fig.suptitle("Regional Consumer Market Comparison Dashboard", fontsize=15, fontweight='bold', x=0.01, ha='left', y=1.01)
-add_source(fig, "Source: World Bank, all panels — PUBLIC. Latest available year per country.")
+add_source(fig, "Source: World Bank, all panels, PUBLIC. Latest available year per country.")
 fig.tight_layout()
 save(fig, "12_regional_dashboard")
 
 # ---------------------------------------------------------------------------
 # 13. [Supplementary] Spending category composition, selected countries
-#     Not one of the brief's 12 required visualisations — an additional chart
+#     Not one of the brief's 12 required visualisations: an additional chart
 #     made possible once real COICOP category data was obtained. Limited to 4
 #     of the 12 categories (the largest, most policy-relevant) and a curated
-#     18-country selection spanning the income range, to stay readable — a
+#     18-country selection spanning the income range, to stay readable. A
 #     36-country x 12-category stacked bar would be unreadable as a chart.
 # ---------------------------------------------------------------------------
 cat_countries = ["United States", "United Kingdom", "Germany", "France", "Italy", "Spain",
@@ -285,7 +285,7 @@ for col, label, color in cats4:
 ax.set_title("Spending composition varies by category as well as by income", loc="left")
 ax.set_xlabel("% of household consumption expenditure")
 ax.legend(loc="upper right", bbox_to_anchor=(1, -0.06), ncol=4, fontsize=9)
-add_source(fig, "Source: OECD SDMX, COICOP purpose categories — PUBLIC. 4 of 12 categories shown (largest/most policy-relevant); remaining categories "
+add_source(fig, "Source: OECD SDMX, COICOP purpose categories, PUBLIC. 4 of 12 categories shown (largest/most policy-relevant); remaining categories "
                  "(alcohol & tobacco, clothing, household goods, health, communication, education, restaurants & hotels, other) omitted for readability, not zero.")
 save(fig, "13_category_composition_selected_countries")
 
