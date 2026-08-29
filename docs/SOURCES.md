@@ -29,6 +29,28 @@ World Bank was selected as the sole quantitative source for the core Country x Y
 
 URL pattern used: `https://api.worldbank.org/v2/country/all/indicator/{code}?format=json&date=2013:2023&per_page=20000`
 
+## Governance Indicators (added v2)
+
+**Publisher:** World Bank, Worldwide Governance Indicators (WGI) project | **Access:** same `api.worldbank.org/v2` REST API | **License:** CC-BY 4.0 | **Date accessed:** 2026-08-29
+
+Added to power the Market Attractiveness Index's Market Stability pillar (see `MARKET_ATTRACTIVENESS_METHODOLOGY.md`), closing the gap documented in `LIMITATIONS.md` item 7. Each indicator is a percentile rank (0–100) against all countries in the WGI's own global sample for that year.
+
+| Indicator code | Description | Frequency | Coverage |
+|---|---|---|---|
+| `GOV_WGI_PV.SC` | Political Stability and Absence of Violence/Terrorism: Percentile Rank | Annual | 2013–2023 |
+| `GOV_WGI_RL.SC` | Rule of Law: Percentile Rank | Annual | 2013–2023 |
+| `GOV_WGI_RQ.SC` | Regulatory Quality: Percentile Rank | Annual | 2013–2023 |
+
+Fetch script: `src/data_collection/governance_indicators.py`. Only 3 of WGI's 6 dimensions were pulled (the 3 most directly about "is this a stable place to do business" — stability, rule of law, regulation), not Voice & Accountability, Government Effectiveness, or Control of Corruption, which speak to related but distinct questions and were left for a future version rather than folded in without a stated reason.
+
+## Category-Level Spending Data (added v2, previously descoped)
+
+**Publisher:** OECD, National Accounts (Household final consumption expenditure by COICOP purpose) | **Access:** `sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAMAIN10@DF_TABLE5,1.0/` (SDMX REST API, no authentication) | **License:** OECD data is freely reusable with attribution | **Date accessed:** 2026-08-29
+
+v1 evaluated this source and descoped it because the SDMX API's 12-dimension query key could not be reliably constructed by guessing. v2 resolved this by fetching the dataflow's DSD structure (`.../dataflow/OECD.SDD.NAD/DSD_NAMAIN10@DF_TABLE5/1.0?references=all`) and using the `.../availableconstraint/{key}?format=csvfile` endpoint to discover real, valid dimension-value combinations for a test country before building the full query — rather than guessing codes and hoping. Working key: `A.{ISO3}.S14..P31DC...{COICOP_CODE}.XDC.V.N.T0117` (frequency=Annual, sector=Households, transaction=Final consumption expenditure, unit=national currency, price base=Value, transformation=None, table=T0117). Fetch script: `src/data_collection/oecd_categories.py`.
+
+Result: 36 countries with a complete 12-category COICOP breakdown, `data/processed/category_spending_shares_oecd.csv`. Validated by confirming each country's 12 category shares sum to approximately 100% of its reported total (range 94.6–102.2% across the 36 countries) — internal consistency that would not hold if the query were pulling mismatched or partial data. This is a genuinely narrower-coverage supplementary layer (~38 economies), not a replacement for the 182-country main panel — see `LIMITATIONS.md` item 1.
+
 ## Regional Classification Source
 
 **Publisher:** UN Statistics Division (UN M49 standard), via the [ISO-3166-Countries-with-Regional-Codes](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes) public compilation | **License:** Public domain / MIT (compilation) | **Date accessed:** 2026-08-29
@@ -42,5 +64,5 @@ Provides authoritative Region/Sub-region classification per ISO3 code, used as t
 ## Sources Evaluated but Not Used for the Core Panel
 
 - **IMF World Economic Outlook database** — evaluated; does not publish a direct household consumption expenditure series with comparable global coverage in its core public tables. Not used as primary source; a future version could incorporate IMF's fiscal/current-account data for additional cross-validation (see README "Recommended Improvements").
-- **OECD SDMX API** — evaluated for COICOP category-level household spending data (Section 10 of the original brief). OECD does publish this, but only for ~38 member/partner countries, and its SDMX API requires exact multi-dimension query keys that could not be reliably constructed within this project's time budget. **Category-level spending analysis was descoped as a result** — see `LIMITATIONS.md` for the full reasoning. This is a documented scope decision, not an oversight.
+- **OECD SDMX API** — initially evaluated for COICOP category-level household spending data (Section 10 of the original brief) and descoped in v1 because its SDMX API requires exact multi-dimension query keys that could not be reliably constructed within v1's time budget. **Resolved in v2** — see "Category-Level Spending Data (added v2)" above and `LIMITATIONS.md` item 1 for the full before/after.
 - **Global Findex digital-payment-specific indicators** beyond the two collected — Findex has thousands of granular indicator variants (by sex, age, education, income quintile); only the two most decision-relevant top-line indicators were collected to keep the digital-readiness layer focused rather than exhaustive.

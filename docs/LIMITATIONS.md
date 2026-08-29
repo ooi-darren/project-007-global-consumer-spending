@@ -2,17 +2,17 @@
 
 Professional research does not hide its limitations. This document is deliberately thorough.
 
-## 1. Category-Level Spending Was Descoped
+## 1. Category-Level Spending: Solved for 36 Countries, Not the Full Panel
 
-The brief asked for spending broken down by category (food, housing, transport, etc.) where reliable data exists. This project **evaluated and descoped** that analysis for the 182-country panel:
+**v1 of this project evaluated and descoped category-level spending** (food, housing, transport, etc.) for the 182-country panel, because OECD's SDMX API — the only free source with COICOP-style category detail — requires precise multi-dimension query keys that could not be resolved within v1's time budget.
 
-- No free, redistributable source publishes COICOP-style category spending consistently across anywhere near 182 countries.
-- OECD does publish this, but only for ~38 member/partner economies, and its SDMX API requires precise multi-dimension query keys that this project could not reliably construct within a reasonable time budget (see `docs/SOURCES.md` for the specific API attempt and error).
-- Commercial sources (Euromonitor, Statista, GlobalData) hold this data but require paid licences this project does not have access to.
+**v2 solved the API problem.** Rather than guessing dimension-key values, the fix was to fetch the dataflow's own DSD structure (`.../dataflow/OECD.SDD.NAD/DSD_NAMAIN10@DF_TABLE5/1.0?references=all`) and query its `availableconstraint` endpoint, which reports which dimension-value combinations actually have data. That revealed the correct 12-part key (see `src/data_collection/oecd_categories.py` for the full key and the reasoning). The result: real COICOP category-level household spending for **36 countries** (OECD members plus several partner economies), saved to `data/processed/category_spending_shares_oecd.csv`, validated by confirming each country's 12 category shares sum to ~95–102% of its reported total (a check consistent with genuine, internally-coherent data — see the `total_check` derivation in that script's tests).
 
-**Consequence:** Visualisation #6 ("spending category composition") is substituted with "household consumption as % of GDP by region" — a real, available macro-level breakdown, but explicitly **not** the same thing as category-level spending, and labelled as such in the chart itself.
+What this **does not** change:
+- Coverage is still ~38 economies, not 182 — OECD does not publish this for most of the developing world, and no free source does either. This is presented as a clearly-scoped **supplementary layer**, deliberately not blended into the main 182-country master dataset.
+- Commercial sources (Euromonitor, Statista, GlobalData) would still be needed for genuinely global category coverage; this project still has no licence for those and does not represent this 36-country layer as a substitute.
 
-**What Version 2 would need:** either an OECD SDMX integration scoped specifically enough to get the dimension keys right (feasible, ~38 countries), or a licensed commercial data source for broader coverage.
+**Consequence:** Visualisation #6 now shows real category-level data — food's share of household spending vs. GDP per capita (Engel's Law), Pearson r = -0.74 (p < 0.001, n = 36) — replacing v1's GDP-share substitute. A supplementary Visualisation #13 shows a 4-category composition breakdown for 18 selected countries. Both are explicitly labelled with their 36-country/OECD-plus-partners scope in the chart footnote, so a reader cannot mistake them for the full global panel.
 
 ## 2. Currency, Inflation, and Exchange Rates
 
@@ -43,7 +43,9 @@ The market segmentation (Notebook 06) produced one 2-country cluster (Argentina,
 
 ## 7. The Market Attractiveness Score Is a Documented Choice, Not an Optimum
 
-Equal weighting across four pillars (market size, growth, spending power, digital readiness) was a deliberate simplification, explicitly not derived from any optimisation or stakeholder-weighted process. A sensitivity check (re-weighting growth 2x) produced a Spearman rank correlation of 0.985 against the base ranking, indicating the *ranking* is not fragile to this particular choice — but a different, defensible weighting scheme (e.g., heavily weighting growth for a growth-focused investor, or heavily weighting stability for a risk-averse one) would produce a different ranking, and the composite score should not be read as a single objective "correct" answer. See `MARKET_ATTRACTIVENESS_METHODOLOGY.md`.
+Equal weighting across five pillars (market size, growth, spending power, digital readiness, and — added in v2 — market stability) was a deliberate simplification, explicitly not derived from any optimisation or stakeholder-weighted process. A sensitivity check (re-weighting growth 2x) produced a Spearman rank correlation of 0.992 against the base ranking, indicating the *ranking* is not fragile to this particular choice — but a different, defensible weighting scheme would produce a different ranking, and the composite score should not be read as a single objective "correct" answer. See `MARKET_ATTRACTIVENESS_METHODOLOGY.md`.
+
+**v1 named Argentina and Lebanon as markets that would score well on the original four pillars despite active macro crises, because the index had no risk/regulatory dimension.** v2 adds a Market Stability pillar (World Bank Worldwide Governance Indicators: political stability, rule of law, regulatory quality — see `src/data_collection/governance_indicators.py`) specifically to close that gap. Outcome: Argentina now ranks 79th of 183 (composite 44.2, market-stability sub-score 49.3 — middling, not alarming, since it is still pulled up by market size) and Lebanon ranks 122nd (composite 36.1, market-stability sub-score 26.5 — genuinely weak). This is a real, measurable effect of adding the pillar, not a cosmetic fix — but it is still one composite index with one specific operationalisation of "stability" (a 3-dimension WGI average), not a substitute for actual country-risk due diligence.
 
 ## 8. Behavioural Claims Are Interpretive, Not Directly Measured
 

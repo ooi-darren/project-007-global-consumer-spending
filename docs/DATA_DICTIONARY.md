@@ -54,7 +54,21 @@ Defines every column in `data/processed/master_consumer_spending.csv` and `data/
 |---|---|---|
 | `digitally_enabled_account_pct.csv` | Global Findex: % of population 15+ with a digitally-enabled financial account | Survey years only (2011/2014/2017/2021/2024); sparse — 108 non-null country-year observations across the full 2011–2024 window |
 | `account_ownership_pct.csv` | Global Findex: % of population 15+ with any financial account | Survey years only; 804 non-null observations |
+| `political_stability_score.csv` | WGI: Political Stability and Absence of Violence, percentile rank (0–100) | Annual, 2013–2023, ~207 countries — added v2, see `SOURCES.md` |
+| `rule_of_law_score.csv` | WGI: Rule of Law, percentile rank (0–100) | Annual, 2013–2023, ~207 countries — added v2 |
+| `regulatory_quality_score.csv` | WGI: Regulatory Quality, percentile rank (0–100) | Annual, 2013–2023, ~207 countries — added v2 |
+
+## Supplementary: category-level spending (added v2, `data/processed/category_spending_shares_oecd.csv`)
+
+**Previously descoped, resolved in v2** — see `LIMITATIONS.md` item 1 and `SOURCES.md` for the full API fix. This file is a **separate, narrower-coverage layer (36 countries)**, deliberately not merged into `master_consumer_spending.csv` or `latest_year_snapshot.csv`, since blending a 36-country layer into a 182-country panel would either silently null out 146 countries or invite a misleading impression of global coverage.
+
+| Column | Unit | Notes |
+|---|---|---|
+| `ISO3` | string | ISO 3166-1 alpha-3 code |
+| `Year` | int | Each country's own latest year with a *complete* 12-category breakdown (not necessarily the same year across countries — see the "latest year" selection logic in `src/data_collection/oecd_categories.py`, which deliberately picks the latest **complete** year, not just the latest year with any data, after an earlier version of this script left 11 countries with a total but no category detail) |
+| `{category}_share_pct` (12 columns: `food`, `alcohol`, `clothing`, `housing`, `household`, `health`, `transport`, `communication`, `recreation`, `education`, `restaurants`, `other`) | % of total household consumption expenditure | COICOP top-level purpose categories; each country's 12 shares sum to approximately 100% (94.6–102.2% across the 36 countries — the deviation from an exact 100% reflects OECD's own published rounding/residual items, not a processing error) |
 
 ## What is deliberately NOT in this dataset
 
-**Category-level spending (food, housing, transport, etc.)** was evaluated and descoped — no free, redistributable, cross-country-comparable source covering anywhere close to the 182-country panel was found. See `LIMITATIONS.md` for the full explanation and what would be required to add it in a future version.
+- **Global category-level spending for all 182 countries**: no free, redistributable, cross-country-comparable source covering anywhere close to 182 countries was found even after resolving the OECD API (OECD's own coverage tops out around 38 economies). The 36-country supplementary layer above is the closest available substitute; it is not blended into the main panel. See `LIMITATIONS.md` item 1.
+- **Voice & Accountability, Government Effectiveness, and Control of Corruption** (3 of WGI's 6 governance dimensions) — only the 3 most directly "stability"-relevant dimensions were pulled for the Market Attractiveness Index; the other 3 speak to related but distinct questions and were left for a future version. See `SOURCES.md`.

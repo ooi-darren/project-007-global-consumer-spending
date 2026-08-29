@@ -115,20 +115,30 @@ add_source(fig, "Source: World Bank, real household consumption expenditure summ
 save(fig, "05_regional_trends_indexed")
 
 # ---------------------------------------------------------------------------
-# 06. Consumption as % of GDP by region (substitute for category composition —
-#     true COICOP category-level spending is not available cross-country; see
-#     docs/LIMITATIONS.md)
+# 06. Category-level spending: food's share falls as income rises (Engel's Law)
+#     v2: real OECD COICOP category data (36 countries), replacing v1's GDP-share
+#     substitute now that docs/LIMITATIONS.md item 1's data gap has been closed.
 # ---------------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(8.5, 5.5))
-r6 = regional.sort_values("median_consumption_pct_gdp")
-bars = ax.barh(r6["Project_007_Region"], r6["median_consumption_pct_gdp"], color=ACCENT_1)
-for b in bars:
-    ax.annotate(f"{b.get_width():.0f}%", xy=(b.get_width(), b.get_y() + b.get_height() / 2),
-                xytext=(5, 0), textcoords="offset points", va="center", fontsize=10)
-ax.set_title("Household consumption's share of GDP varies from ~45% to ~75% by region", loc="left")
-ax.set_xlabel("Median household consumption, % of GDP")
-add_source(fig, "Source: World Bank — PUBLIC. Category-level (food/housing/etc.) spending is not available cross-country in a free redistributable form; see docs/LIMITATIONS.md.")
-save(fig, "06_consumption_share_of_gdp_by_region")
+from scipy.stats import pearsonr
+cat = pd.read_csv("data/processed/category_spending_shares_oecd.csv")
+c6 = cat.merge(snap[["ISO3", "Country", "gdp_per_capita_ppp_current_intl"]], on="ISO3", how="inner")
+c6 = c6.dropna(subset=["food_share_pct", "gdp_per_capita_ppp_current_intl"])
+r, p = pearsonr(c6["gdp_per_capita_ppp_current_intl"], c6["food_share_pct"])
+
+fig, ax = plt.subplots(figsize=(9, 6))
+ax.scatter(c6["gdp_per_capita_ppp_current_intl"], c6["food_share_pct"], s=55, color=ACCENT_1, alpha=0.8, zorder=3)
+label_these = ["United States", "Mexico", "Romania", "Colombia", "Ireland", "United Kingdom", "Costa Rica", "Chile"]
+for _, row in c6[c6["Country"].isin(label_these)].iterrows():
+    ax.annotate(row["Country"], xy=(row["gdp_per_capita_ppp_current_intl"], row["food_share_pct"]),
+                xytext=(6, 4), textcoords="offset points", fontsize=9, color=INK_SECONDARY)
+ax.set_title("Richer countries spend a smaller share of household budgets on food", loc="left")
+ax.set_xlabel("GDP per capita, PPP (current international $)")
+ax.set_ylabel("Food & non-alcoholic beverages, % of household spending")
+ax.text(0.98, 0.95, f"Pearson r = {r:.2f}  (p < 0.001, n = {len(c6)})", transform=ax.transAxes,
+        ha="right", va="top", fontsize=10, color=INK_SECONDARY, style="italic")
+add_source(fig, "Source: OECD SDMX (Household final consumption expenditure by COICOP purpose) merged with World Bank GDP per capita, PPP — PUBLIC. "
+                 "36 countries with complete category-level data (OECD members + partners); not the full 182-country panel — see docs/LIMITATIONS.md.")
+save(fig, "06_food_share_vs_income_engels_law")
 
 # ---------------------------------------------------------------------------
 # 07. Income vs consumer spending (scatter)
@@ -249,4 +259,34 @@ add_source(fig, "Source: World Bank, all panels — PUBLIC. Latest available yea
 fig.tight_layout()
 save(fig, "12_regional_dashboard")
 
-print("\nAll 12 visualisations generated.")
+# ---------------------------------------------------------------------------
+# 13. [Supplementary] Spending category composition, selected countries
+#     Not one of the brief's 12 required visualisations — an additional chart
+#     made possible once real COICOP category data was obtained. Limited to 4
+#     of the 12 categories (the largest, most policy-relevant) and a curated
+#     18-country selection spanning the income range, to stay readable — a
+#     36-country x 12-category stacked bar would be unreadable as a chart.
+# ---------------------------------------------------------------------------
+cat_countries = ["United States", "United Kingdom", "Germany", "France", "Italy", "Spain",
+                  "Poland", "Czechia", "Hungary", "Greece", "Portugal", "Chile",
+                  "Mexico", "Colombia", "Costa Rica", "Romania", "Lithuania", "Australia"]
+c13 = cat.merge(snap[["ISO3", "Country"]], on="ISO3").set_index("Country").loc[cat_countries]
+c13 = c13.sort_values("food_share_pct")
+cats4 = [("food_share_pct", "Food & beverages", ACCENT_1),
+         ("housing_share_pct", "Housing, water & energy", ACCENT_2),
+         ("transport_share_pct", "Transport", '#5a9bd6'),
+         ("recreation_share_pct", "Recreation & culture", GRAY)]
+
+fig, ax = plt.subplots(figsize=(9.5, 7))
+left = pd.Series(0.0, index=c13.index)
+for col, label, color in cats4:
+    ax.barh(c13.index, c13[col], left=left, color=color, label=label, height=0.65)
+    left = left + c13[col]
+ax.set_title("Spending composition varies by category as well as by income", loc="left")
+ax.set_xlabel("% of household consumption expenditure")
+ax.legend(loc="upper right", bbox_to_anchor=(1, -0.06), ncol=4, fontsize=9)
+add_source(fig, "Source: OECD SDMX, COICOP purpose categories — PUBLIC. 4 of 12 categories shown (largest/most policy-relevant); remaining categories "
+                 "(alcohol & tobacco, clothing, household goods, health, communication, education, restaurants & hotels, other) omitted for readability, not zero.")
+save(fig, "13_category_composition_selected_countries")
+
+print("\nAll 12 required visualisations generated, plus 1 supplementary (category composition).")
