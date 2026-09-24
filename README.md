@@ -2,7 +2,7 @@
 
 <img src="./outputs/figures/01_global_spending_map.png" width="800" alt="Global map of consumer spending per capita, concentrated in North America, Europe, and wealthy East Asia/Gulf states">
 
-**Part of a [9-case-study portfolio](https://github.com/ooi-darren)**, the first to move beyond a single country into a genuinely global panel.
+**Part of a [10-case-study portfolio](https://github.com/ooi-darren)**, the first to move beyond a single country into a genuinely global panel.
 
 ## Executive Summary
 
